@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Cerveza } from 'src/app/models/cerveza.interface';
 import { VehicleService } from 'src/app/services/api-cervezas.service';
 
 @Component({
@@ -7,6 +8,8 @@ import { VehicleService } from 'src/app/services/api-cervezas.service';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
+
+  arrayCervezas: Cerveza[] = [];
 
   constructor(
     private vehicleService: VehicleService,
@@ -21,7 +24,7 @@ export class HomeComponent implements OnInit {
 
     this.vehicleService.getCervezas()
     .subscribe(
-      res => console.log(res)
+      res =>   this.arrayCervezas = res
     );
 
   }
