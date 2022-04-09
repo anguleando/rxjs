@@ -1,3 +1,22 @@
 <h1>HOME</h1>
 
 <button type="button" class="btn btn-primary" (click)="onGetCervezas()">TRAER CERVEZAS</button>
+
+<table class="table table-dark table-striped">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Nombre</th>
+      <th scope="col">Descripcion</th>
+      <th scope="col">Imagen</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let cerveza of arrayCervezas">
+      <th scope="row">{{ cerveza?.id }}</th>
+      <td>{{ cerveza?.name }}</td>
+      <td>{{ cerveza?.description }}</td>
+      <td><img [src]="cerveza?.image_url" [alt]="cerveza?.description" class="img-thumbnail"></td>
+    </tr>
+  </tbody>
+</table>
