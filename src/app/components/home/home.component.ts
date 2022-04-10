@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Cerveza } from 'src/app/models/cerveza.interface';
-import { VehicleService } from 'src/app/services/api-cervezas.service';
+import { BeersService } from 'src/app/services/beers.service';
 
 @Component({
   selector: 'app-home',
@@ -12,7 +12,7 @@ export class HomeComponent implements OnInit {
   arrayCervezas: Cerveza[] = [];
 
   constructor(
-    private vehicleService: VehicleService,
+    private beersService: BeersService,
   ) { }
 
   ngOnInit(): void {
@@ -22,10 +22,13 @@ export class HomeComponent implements OnInit {
 
     console.log('entro en onGetCervezas');
 
-    this.vehicleService.getCervezas()
+    this.beersService.getCervezas()
     .subscribe(
-      res =>   this.arrayCervezas = res
-    );
+      res =>  {
+        this.arrayCervezas = res;
+        console.log('EN subscribe FINAL - Recivo resp: ', res);
+
+    });
 
   }
 

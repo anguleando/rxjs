@@ -8,12 +8,17 @@ import { Cerveza } from '../models/cerveza.interface';
 @Injectable({
   providedIn: 'root',
 })
-export class VehicleService {
+export class BeersService {
+  // https://punkapi.com/documentation/v2
   private apiUrlCervezas = environment.apiUrlCervezas;
 
   constructor(private http: HttpClient) {}
 
   getCervezas(): Observable<Cerveza[]> {
-    return this.http.get<Cerveza[]>(`${this.apiUrlCervezas}/beers`);
+    return this.http.get<Cerveza[]>(`${this.apiUrlCervezas}/beers?page=1&per_page=80`);
+  }
+
+  getCerveza(id_cerveza: number): Observable<Cerveza> {
+    return this.http.get<Cerveza>(`${this.apiUrlCervezas}/beers/${id_cerveza}?page=1&per_page=80`);
   }
 }
