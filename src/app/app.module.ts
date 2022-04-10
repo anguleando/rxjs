@@ -7,12 +7,14 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './components/home/home.component';
 import { OtherComponent } from './components/other/other.component';
+import { OperadoresBasicosComponent } from './components/operadores-basicos/operadores-basicos.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
-    OtherComponent
+    OtherComponent,
+    OperadoresBasicosComponent,
   ],
   imports: [
     BrowserModule,
