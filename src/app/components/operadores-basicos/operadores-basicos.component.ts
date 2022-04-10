@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { from, mergeMap, Observer, of, switchMap, tap, toArray } from 'rxjs';
+import { from, map, mergeMap, Observer, of, switchMap, tap, toArray } from 'rxjs';
 import { Cerveza } from 'src/app/models/cerveza.interface';
 import { BeersService } from 'src/app/services/beers.service';
 
@@ -88,11 +88,34 @@ export class OperadoresBasicosComponent implements OnInit {
   onGetCervezasMergeMap() {
     console.log('entro en onGetCervezasMergeMap');
 
-    // this.beersService.getCervezas().pipe()
+    this.beersService.getCervezas().pipe()
+    .subscribe(this.myObserver);
+
+    // this.beersService.getCervezas().pipe(
+    //   mergeMap( (res) => from(res)),
+    // )
     // .subscribe(this.myObserver);
+
+  }
+
+  onGetCervezasMap() {
+    console.log('entro en onGetCervezasMap');
 
     this.beersService.getCervezas().pipe(
       mergeMap( (res) => from(res)),
+
+      // transformar para quedarnos solo con 1 atributo
+      // map( (cerveza: Cerveza) => cerveza.name),
+
+      // transformar para añadirles en el nombre la id
+      // Fijarse que así solo devuelve en nombre
+      // map( (cerveza: Cerveza) => cerveza.name = `${cerveza.name} (${cerveza.id})` ),
+
+      // map( (cerveza: Cerveza) => {
+      //   cerveza.name = `${cerveza.name} (${cerveza.id})`;
+      //   return cerveza;
+      // }),
+
     )
     .subscribe(this.myObserver);
 
