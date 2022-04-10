@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { from, Observer, of, switchMap, tap, toArray } from 'rxjs';
+import { from, mergeMap, Observer, of, switchMap, tap, toArray } from 'rxjs';
 import { Cerveza } from 'src/app/models/cerveza.interface';
 import { BeersService } from 'src/app/services/beers.service';
 
@@ -85,7 +85,18 @@ export class OperadoresBasicosComponent implements OnInit {
 
   }
 
+  onGetCervezasMergeMap() {
+    console.log('entro en onGetCervezasMergeMap');
 
+    // this.beersService.getCervezas().pipe()
+    // .subscribe(this.myObserver);
+
+    this.beersService.getCervezas().pipe(
+      mergeMap( (res) => from(res)),
+    )
+    .subscribe(this.myObserver);
+
+  }
 
 
 }
