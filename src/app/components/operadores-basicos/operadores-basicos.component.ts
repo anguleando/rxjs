@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { from, map, mergeMap, Observer, of, switchMap, tap, toArray } from 'rxjs';
+import { from, map, mergeMap, Observer, of, pluck, switchMap, tap, toArray } from 'rxjs';
 import { Cerveza } from 'src/app/models/cerveza.interface';
 import { BeersService } from 'src/app/services/beers.service';
 
@@ -104,8 +104,11 @@ export class OperadoresBasicosComponent implements OnInit {
     this.beersService.getCervezas().pipe(
       mergeMap( (res) => from(res)),
 
-      // transformar para quedarnos solo con 1 atributo
-      // map( (cerveza: Cerveza) => cerveza.name),
+      // transformar para quedarnos solo con 1 solo atributo
+      map( (cerveza: Cerveza) => cerveza?.name),
+
+      // transformar para quedarnos solo con 1 solo atributo de uno de los 'sub'objetos que tiene el objeto (objeto 'ingredients' en este caso)
+      // map( (cerveza: Cerveza) => cerveza?.ingredients?.yeast ),
 
       // transformar para añadirles en el nombre la id
       // Fijarse que así solo devuelve en nombre
@@ -118,7 +121,22 @@ export class OperadoresBasicosComponent implements OnInit {
 
     )
     .subscribe(this.myObserver);
+  }
 
+  onGetCervezasPluck() {
+    console.log('entro en onGetCervezasPluck');
+    // https://rxjs.dev/api/operators/pluck
+
+    this.beersService.getCervezas().pipe(
+      mergeMap( (res) => from(res)),
+
+      // // transformar para quedarnos solo con 1 atributo
+      // pluck('name'),
+
+      // transformar para quedarnos solo con 1 atributo
+      pluck('ingredients', 'yeast'),
+    )
+    .subscribe(this.myObserver);
   }
 
 
