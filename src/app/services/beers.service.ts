@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { from, mergeMap, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 
 import { environment } from 'src/environments/environment';
@@ -16,6 +16,12 @@ export class BeersService {
 
   getCervezas(): Observable<Cerveza[]> {
     return this.http.get<Cerveza[]>(`${this.apiUrlCervezas}/beers?page=1&per_page=80`);
+  }
+
+  getCervezasImproved(): Observable<Cerveza> {
+    return this.http.get<Cerveza[]>(`${this.apiUrlCervezas}/beers?page=1&per_page=80`).pipe(
+      mergeMap( (res) => from(res) ));
+    ;
   }
 
   getCerveza(id_cerveza: number): Observable<Cerveza> {

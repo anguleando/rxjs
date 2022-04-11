@@ -1,0 +1,28 @@
+<h1>BEHAVIOUR SUBJECT</h1>
+<p> BehaviorSubject es un tipo especial de observable que es observable y observer a la vez.
+    Permite la transmisión múltiple de valores a muchos observadores simultáneos, siempre con el valor almacenado de la última emision.
+    Es por ello que cada vez que un nuevo consumidor se suscribe al dato, siempre recibirá el valor actual (esta es la principal diferencia respecto al observable estándar).
+</p>
+
+    <p><button type="button" class="btn btn-primary" (click)="observableNormal()">Observable normal</button></p>
+
+
+<table class="table table-dark table-striped">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Nombre</th>
+      <th scope="col">Descripcion</th>
+      <th scope="col">Imagen</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let cerveza of arrayCervezas">
+      <th scope="row">{{ cerveza?.id }}</th>
+      <td>{{ cerveza?.name }}</td>
+      <td>{{ cerveza?.description }}</td>
+      <td><img [src]="cerveza?.image_url" [alt]="cerveza?.description" class="img-thumbnail"></td>
+    </tr>
+  </tbody>
+</table>
+

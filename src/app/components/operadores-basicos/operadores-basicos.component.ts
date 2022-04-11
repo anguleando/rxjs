@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { from, map, mergeMap, Observer, of, pluck, switchMap, tap, toArray } from 'rxjs';
+import { filter, from, map, mergeMap, Observer, of, pluck, switchMap, tap, toArray } from 'rxjs';
 import { Cerveza } from 'src/app/models/cerveza.interface';
 import { BeersService } from 'src/app/services/beers.service';
 
@@ -15,6 +15,7 @@ export class OperadoresBasicosComponent implements OnInit {
   myObserver: Observer<any> = {
     next: (dato: any) => { // call back
       console.log('NEXT en subscribe - Res:', dato);
+      // this.arrayCervezas.push(dato);
     },
     error: (err) => {
       console.log('ERROR EN OBSERVABLE:', err);
@@ -45,16 +46,19 @@ export class OperadoresBasicosComponent implements OnInit {
 
       // // *****************************
       // // FUNCIONAMIENTO NORMAL
-      // tap( res => console.log(res)),
+      // tap( res =>  {
+      //   this.arrayCervezas = res;
+      //   console.log('EN subscribe FINAL - Recibo res: ', res);
+      // }),
       // // *****************************
 
-      // PATRON PARA CUALQUIER OPERADOR
-      tap((res: any) => {
-        console.log(res);
-        return res;
-      }),
+      // // PATRON PARA CUALQUIER OPERADOR
+      // tap((res: any) => {
+      //   console.log(res);
+      //   return res;
+      // }),
 
-      // tap(this.myOperadorBody),
+      tap(this.myOperadorBody),
 
       // tap(res => {
       //   console.log('EN tap - res:', res);
@@ -75,12 +79,7 @@ export class OperadoresBasicosComponent implements OnInit {
       // }),
 
     )
-    .subscribe(
-      (res: any) =>  {
-        // this.arrayCervezas = res;
-        console.log('EN subscribe FINAL - Recivo res: ', res);
-
-    });
+    .subscribe();
     // .subscribe(this.myObserver);
 
   }
@@ -88,13 +87,13 @@ export class OperadoresBasicosComponent implements OnInit {
   onGetCervezasMergeMap() {
     console.log('entro en onGetCervezasMergeMap');
 
-    this.beersService.getCervezas().pipe()
-    .subscribe(this.myObserver);
-
-    // this.beersService.getCervezas().pipe(
-    //   mergeMap( (res) => from(res)),
-    // )
+    // this.beersService.getCervezas().pipe()
     // .subscribe(this.myObserver);
+
+    this.beersService.getCervezas().pipe(
+      mergeMap( (res) => from(res)),
+    )
+    .subscribe(this.myObserver);
 
   }
 
@@ -124,6 +123,7 @@ export class OperadoresBasicosComponent implements OnInit {
   }
 
   onGetCervezasPluck() {
+    // NO MIRAR DEPRECATED
     console.log('entro en onGetCervezasPluck');
     // https://rxjs.dev/api/operators/pluck
 
@@ -139,5 +139,28 @@ export class OperadoresBasicosComponent implements OnInit {
     .subscribe(this.myObserver);
   }
 
+  onGetCervezasFilter() {
+    console.log('entro en onGetCervezasPluck');
 
+    // NOTA!!!!!! Fijarse que getCervezasImproved ya no necesita el mergemap
+    this.beersService.getCervezasImproved().pipe(
+      filter( cerveza => cerveza.name.startsWith('AB')),
+    )
+    .subscribe(this.myObserver);
+
+  }
+
+  onGetCervezasCadenasDeOperadores() {
+    console.log('entro en onGetCervezasCadenasDeOperadores');
+
+    // NOTA!!!!!! Fijarse que getCervezasImproved ya no necesita el mergemap
+    this.beersService.getCervezasImproved().pipe(
+      filter( cerveza => cerveza.name.startsWith('AB')),
+      map( cerveza => cerveza.name ),
+      map( nombres => 'TODOS EMPIEZAN POR AB: ' + nombres),
+      filter( nombres => nombres.endsWith('4')),
+    )
+    .subscribe(this.myObserver);
+
+  }
 }
