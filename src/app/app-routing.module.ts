@@ -4,6 +4,7 @@ import { BehavioursubjectComponent } from './components/behavioursubject/behavio
 import { HomeComponent } from './components/home/home.component';
 import { OperadoresBasicosComponent } from './components/operadores-basicos/operadores-basicos.component';
 import { OtherComponent } from './components/other/other.component';
+import { SubscriptionComponent } from './components/subscription/subscription.component';
 
 const routes: Routes = [
   {
@@ -17,6 +18,10 @@ const routes: Routes = [
   {
     path:'operadores-basico',
     component: OperadoresBasicosComponent
+  },
+  {
+    path:'subscriptions',
+    component: SubscriptionComponent,
   },
   {
     path:'behaviourSubject',

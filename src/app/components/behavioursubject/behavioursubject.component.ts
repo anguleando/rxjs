@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Observer, Subscription } from 'rxjs';
 import { Cerveza } from 'src/app/models/cerveza.interface';
+import { MyObservableService } from 'src/app/services/my-observable.service';
 
 @Component({
   selector: 'app-behavioursubject',
@@ -10,53 +11,102 @@ import { Cerveza } from 'src/app/models/cerveza.interface';
 export class BehavioursubjectComponent implements OnInit {
   arrayCervezas: Cerveza[] = [];
 
-  constructor() {}
+  mySub1!: Subscription;
+  mySub2!: Subscription;
+  mySub3!: Subscription;
+
+  private cervezasSource$ = new BehaviorSubject<Cerveza[] | null>(null);
+  cervezas$ = this.cervezasSource$.asObservable();
+
+  constructor(private myObservableService: MyObservableService) {}
 
   ngOnInit(): void {}
 
   observableNormal() {
-    const obs$ = new Observable<string>((mySubscriber) => {
-      mySubscriber.next('Hola');
-      mySubscriber.next('Como estas?');
-      // Forzar error:
-      // const myError:any = undefined;
-      // myError.kk = 'kk';
 
-      mySubscriber.next('adios');
+    // const myObserver: Observer<any> = {
+    //   next: (dato: any) => { // call back
+    //     console.log('NEXT en subscribe - Res:', dato);
+    //     // this.arrayCervezas.push(dato);
+    //   },
+    //   error: (err) => {
+    //     console.log('ERROR EN OBSERVABLE:', err);
+    //   },
+    //   complete: () => {
+    //     console.log('El observer ha sido completado');
+    //   },
+    // };
 
-      mySubscriber.complete();
+    const myBehaviourSubject$ = new BehaviorSubject(666);
 
-      mySubscriber.next('XXXXXXXXX');
-    });
-
-    console.log('primer observable');
-    obs$.subscribe(console.log);
-
-    console.log('segundo observable');
-    obs$.subscribe(console.log);
-
-    console.log('tercer observable');
-    obs$.subscribe(console.log);
-
-
-    const obs2$ = new Observable<number>((mySubscriber) => {
-
-      const randomId = setInterval(
-        () => mySubscriber.next( Math.random() ), 2000
-      );
-
-      return () => clearInterval(randomId);
-
-    });
+    const obs$: Observable<number> =
+      this.myObservableService.returnMyObserverInterval();
 
     console.log('primer observable');
-    const mySub1 = obs2$.subscribe(nunRandom => console.log('mySub1', nunRandom));
+    this.mySub1 = obs$.subscribe((nunRandom) =>
+      console.log('mySub1', nunRandom)
+    );
+
+
 
     console.log('segundo observable');
-    const mySub2 = obs2$.subscribe(nunRandom => console.log('mySub2', nunRandom));
+    this.mySub2 = obs$.subscribe((nunRandom) =>
+      console.log('mySub2', nunRandom)
+    );
 
     console.log('tercer observable');
-    const mySub3 = obs2$.subscribe(nunRandom => console.log('mySub3', nunRandom));
+    this.mySub3 = obs$.subscribe((nunRandom) =>
+      console.log('mySub3', nunRandom)
+    );
+  }
+
+  observableDessubscribir() {
+    this.mySub1.unsubscribe();
+    this.mySub2.unsubscribe();
+    this.mySub3.unsubscribe();
+  }
+
+  behaviourSub() {
+    // Es un observer:
+    const obs$: Observable<number> =
+      this.myObservableService.returnMyObserverInterval();
+
+    const myBehaviourSubject$ = new BehaviorSubject(666);
+    obs$.subscribe(myBehaviourSubject$);
+
+    console.log('primer observable');
+    this.mySub1 = myBehaviourSubject$.subscribe((nunRandom) =>
+      console.log('mySub1', nunRandom)
+    );
+
+    console.log('segundo observable');
+    this.mySub2 = myBehaviourSubject$.subscribe((nunRandom) =>
+      console.log('mySub2', nunRandom)
+    );
+
+    console.log('tercer observable');
+    this.mySub3 = myBehaviourSubject$.subscribe((nunRandom) =>
+      console.log('mySub3', nunRandom)
+    );
+  }
+
+  set cervezas(data: Cerveza[] | null) {
+    this.cervezasSource$.next(data);
+  }
+
+  get cervezas() {
+    return this.cervezasSource$.value;
+  }
+
+  ejemplBorrarTabla() {
+
+    const ejemploListaCervezasEnMitabla = this.cervezas;
+
+    this.cervezas = null;
+
+
 
   }
+
+
 }

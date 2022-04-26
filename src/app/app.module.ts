@@ -9,6 +9,7 @@ import { HomeComponent } from './components/home/home.component';
 import { OtherComponent } from './components/other/other.component';
 import { OperadoresBasicosComponent } from './components/operadores-basicos/operadores-basicos.component';
 import { BehavioursubjectComponent } from './components/behavioursubject/behavioursubject.component';
+import { SubscriptionComponent } from './components/subscription/subscription.component';
 
 @NgModule({
   declarations: [
@@ -17,6 +18,7 @@ import { BehavioursubjectComponent } from './components/behavioursubject/behavio
     OtherComponent,
     OperadoresBasicosComponent,
     BehavioursubjectComponent,
+    SubscriptionComponent,
   ],
   imports: [
     BrowserModule,
